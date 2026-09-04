@@ -31,16 +31,12 @@
 
     </div>
 
-
     {{-- Pesan berhasil --}}
     @if(session('success'))
-
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
-
     @endif
-
 
     {{-- Tabel Jenis Produk --}}
     <div class="card shadow-sm border-0">
@@ -56,7 +52,6 @@
                 <table class="table table-bordered table-striped align-middle mb-0">
 
                     <thead class="table-primary">
-
                         <tr>
 
                             {{-- No --}}
@@ -74,7 +69,7 @@
                                 Nama Jenis Produk
                             </th>
 
-                            {{-- Aksi hanya ditampilkan untuk Admin --}}
+                            {{-- Aksi hanya untuk Admin --}}
                             @if(auth()->user()->role_id == 1)
                                 <th width="180" class="text-center">
                                     Aksi
@@ -82,86 +77,96 @@
                             @endif
 
                         </tr>
-
                     </thead>
 
+                    <tbody>
 
-<tbody>
+                        @forelse($jenisProduks as $jenis)
 
-    @forelse($jenisProduks as $jenis)
+                            <tr>
 
-        <tr>
+                                {{-- Nomor --}}
+                                <td class="text-center">
+                                    {{ $loop->iteration }}
+                                </td>
 
-            <td class="text-center">
-                {{ $loop->iteration }}
-            </td>
+                                {{-- Diinput oleh --}}
+                                <td class="text-center">
 
-            <td class="text-center">
+                                    @if($jenis->user)
 
-                @if($jenis->user)
+                                        <strong>
+                                            {{ $jenis->user->name }}
+                                        </strong>
 
-                    <strong>
-                        {{ $jenis->user->name }}
-                    </strong>
+                                    @else
 
-                @else
+                                        <span class="text-muted">
+                                            Data lama
+                                        </span>
 
-                    <span class="text-muted">
-                        Data lama
-                    </span>
+                                    @endif
 
-                @endif
+                                </td>
 
-            </td>
+                                {{-- Nama Jenis Produk --}}
+                                <td>
 
-            <td>
-                <strong>
-                    {{ $jenis->nama }}
-                </strong>
-            </td>
+                                    <strong>
+                                        {{ $jenis->nama_jenis }}
+                                    </strong>
 
-            @if(auth()->user()->role_id == 1)
+                                </td>
 
-                <td class="text-center">
+                                {{-- Aksi --}}
+                                @if(auth()->user()->role_id == 1)
 
-                    <a href="{{ route('jenis-produk.edit', $jenis->id) }}"
-                       class="btn btn-sm btn-info text-white fw-bold">
-                        Edit
-                    </a>
+                                    <td class="text-center">
 
-                    <form action="{{ route('jenis-produk.destroy', $jenis->id) }}"
-                          method="POST"
-                          class="d-inline">
+                                        <a href="{{ route('jenis-produk.edit', $jenis->id) }}"
+                                           class="btn btn-sm btn-info text-white fw-bold">
+                                            Edit
+                                        </a>
 
-                        @csrf
-                        @method('DELETE')
+                                        <form action="{{ route('jenis-produk.destroy', $jenis->id) }}"
+                                              method="POST"
+                                              class="d-inline">
 
-                        <button type="submit"
-                                class="btn btn-sm btn-primary fw-bold"
-                                onclick="return confirm('Yakin ingin menghapus jenis produk ini?')">
-                            Hapus
-                        </button>
+                                            @csrf
 
-                    </form>
+                                            @method('DELETE')
 
-                </td>
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-primary fw-bold"
+                                                    onclick="return confirm('Yakin ingin menghapus jenis produk ini?')">
+                                                Hapus
+                                            </button>
 
-            @endif
+                                        </form>
 
-        </tr>
+                                    </td>
 
-    @empty
+                                @endif
 
-        <tr>
-            <td colspan="{{ auth()->user()->role_id == 1 ? 4 : 3 }}"
-                class="text-center text-muted py-4">
-                Belum ada jenis produk.
-            </td>
-        </tr>
+                            </tr>
 
-    @endforelse
+                        @empty
 
-</tbody>
+                            <tr>
+
+                                <td colspan="{{ auth()->user()->role_id == 1 ? 4 : 3 }}"
+                                    class="text-center text-muted py-4">
+
+                                    Belum ada jenis produk.
+
+                                </td>
+
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+
                 </table>
 
             </div>

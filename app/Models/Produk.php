@@ -2,41 +2,48 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\JenisProduk;
 
 class Produk extends Model
 {
-    use HasFactory;
-
     protected $table = 'produk';
 
     protected $fillable = [
-        'user_id',
         'nama',
         'jenis_produk_id',
         'harga_beli',
         'harga_jual',
         'stok',
         'foto',
+        'user_id',
     ];
 
     /**
-     * Relasi ke user yang menginput produk.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * Relasi produk ke jenis produk.
+     * Relasi Produk ke JenisProduk.
+     *
+     * produk.jenis_produk_id
+     *          ↓
+     * jenis_produk.id
      */
     public function jenisProduk()
     {
         return $this->belongsTo(
-            Jenis::class,
+            JenisProduk::class,
             'jenis_produk_id',
+            'id'
+        );
+    }
+
+    /**
+     * Relasi Produk ke User.
+     */
+    public function user()
+    {
+        return $this->belongsTo(
+            User::class,
+            'user_id',
             'id'
         );
     }

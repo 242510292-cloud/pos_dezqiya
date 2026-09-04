@@ -40,18 +40,16 @@
                         Nama Jenis Produk
                     </label>
 
-                    <input
-                        type="text"
-                        name="nama"
-                        id="nama"
-                        class="form-control @error('nama') is-invalid @enderror"
-                        value="{{ old('nama', $jenisProduk->nama) }}"
-                        placeholder="Masukkan nama jenis produk"
-                        required
-                        autofocus
-                    >
+                  <input
+    type="text"
+    name="nama_jenis"
+    id="nama_jenis"
+    class="form-control @error('nama_jenis') is-invalid @enderror"
+    value="{{ old('nama_jenis', $jenisProduk->nama_jenis) }}"
+    required
+>
 
-                    @error('nama')
+                    @error('nama_jenis')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>

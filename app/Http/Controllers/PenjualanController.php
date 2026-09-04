@@ -107,6 +107,20 @@ class PenjualanController extends Controller
     }
 
 
+    /**
+     * CETAK STRUK PENJUALAN
+     */
+    public function struk(Penjualan $penjualan)
+    {
+        $penjualan->load(
+            'user',
+            'itemPenjualan.produk'
+        );
+
+        return view('penjualan.struk', compact('penjualan'));
+    }
+
+
 
 
     /**

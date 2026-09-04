@@ -10,20 +10,37 @@ class JenisProdukController extends Controller
     /**
      * Menampilkan daftar jenis produk.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $jenisProduks = JenisProduk::with('user')
-            ->latest()
-            ->get();
+        $this->authorize('viewAny', JenisProduk::class);
 
-        return view('jenis_produk.index', compact('jenisProduks'));
+        $keyword = $request->input('search');
+
+        $jenisProduks = JenisProduk::with('user')
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where(
+                    'nama_jenis',
+                    'like',
+                    '%' . $keyword . '%'
+                );
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view(
+            'jenis_produk.index',
+            compact('jenisProduks')
+        );
     }
 
     /**
-     * Menampilkan form tambah.
+     * Menampilkan form tambah jenis produk.
      */
     public function create()
     {
+        $this->authorize('create', JenisProduk::class);
+
         return view('jenis_produk.create');
     }
 
@@ -32,18 +49,46 @@ class JenisProdukController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
+        $this->authorize('create', JenisProduk::class);
+
+        $validated = $request->validate([
+            'nama_jenis' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:jenis_produks,nama_jenis',
+            ],
         ]);
 
         JenisProduk::create([
-            'nama' => $request->nama,
+            'nama_jenis' => $validated['nama_jenis'],
             'user_id' => auth()->id(),
         ]);
 
         return redirect()
             ->route('jenis-produk.index')
-            ->with('success', 'Jenis produk berhasil ditambahkan.');
+            ->with(
+                'success',
+                'Jenis produk berhasil ditambahkan.'
+            );
+    }
+
+    /**
+     * Menampilkan detail jenis produk.
+     */
+    public function show(JenisProduk $jenisProduk)
+    {
+        $this->authorize('view', $jenisProduk);
+
+        $jenisProduk->load([
+            'user',
+            'produks',
+        ]);
+
+        return view(
+            'jenis_produk.show',
+            compact('jenisProduk')
+        );
     }
 
     /**
@@ -51,25 +96,42 @@ class JenisProdukController extends Controller
      */
     public function edit(JenisProduk $jenisProduk)
     {
-        return view('jenis_produk.edit', compact('jenisProduk'));
+        $this->authorize('update', $jenisProduk);
+
+        return view(
+            'jenis_produk.edit',
+            compact('jenisProduk')
+        );
     }
 
     /**
      * Mengupdate jenis produk.
      */
-    public function update(Request $request, JenisProduk $jenisProduk)
-    {
-        $request->validate([
-            'nama' => 'required|string|max:255',
+    public function update(
+        Request $request,
+        JenisProduk $jenisProduk
+    ) {
+        $this->authorize('update', $jenisProduk);
+
+        $validated = $request->validate([
+            'nama_jenis' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:jenis_produks,nama_jenis,' . $jenisProduk->id,
+            ],
         ]);
 
         $jenisProduk->update([
-            'nama' => $request->nama,
+            'nama_jenis' => $validated['nama_jenis'],
         ]);
 
         return redirect()
             ->route('jenis-produk.index')
-            ->with('success', 'Jenis produk berhasil diperbarui.');
+            ->with(
+                'success',
+                'Jenis produk berhasil diupdate.'
+            );
     }
 
     /**
@@ -77,10 +139,25 @@ class JenisProdukController extends Controller
      */
     public function destroy(JenisProduk $jenisProduk)
     {
+        $this->authorize('delete', $jenisProduk);
+
+        // Jangan hapus jika masih digunakan oleh produk
+        if ($jenisProduk->produks()->exists()) {
+            return redirect()
+                ->route('jenis-produk.index')
+                ->with(
+                    'error',
+                    'Jenis produk tidak dapat dihapus karena masih digunakan oleh produk.'
+                );
+        }
+
         $jenisProduk->delete();
 
         return redirect()
             ->route('jenis-produk.index')
-            ->with('success', 'Jenis produk berhasil dihapus.');
+            ->with(
+                'success',
+                'Jenis produk berhasil dihapus.'
+            );
     }
 }

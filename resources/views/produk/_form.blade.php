@@ -72,12 +72,13 @@
                 -- Pilih Jenis --
             </option>
 
-            @foreach ($jenisProduks as $jenis)
-                <option value="{{ $jenis->id }}"
-                    {{ old('jenis_produk_id', $produk->jenis_produk_id ?? '') == $jenis->id ? 'selected' : '' }}>
-                    {{ $jenis->nama }}
-                </option>
-            @endforeach
+          @foreach ($jenisProduks as $jenis)
+    <option value="{{ $jenis->id }}"
+        {{ old('jenis_produk_id', $produk->jenis_produk_id ?? '') == $jenis->id ? 'selected' : '' }}>
+        {{ $jenis->nama_jenis }}
+    </option>
+@endforeach
+
 
         </select>
 

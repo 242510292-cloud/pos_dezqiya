@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Produk\StoreRequest;
 use App\Http\Requests\Produk\UpdateRequest;
 use App\Http\Requests\SearchRequest;
-use App\Models\Jenis;
+use App\Models\JenisProduk;
 use App\Models\Produk;
 use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar produk.
      */
     public function index(SearchRequest $request)
     {
@@ -32,20 +32,19 @@ class ProdukController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan form tambah produk.
      */
     public function create()
     {
         $this->authorize('create', Produk::class);
 
-        // Mengambil data jenis produk dari tabel jenis
-        $jenisProduks = Jenis::orderBy('nama', 'asc')->get();
+        $jenisProduks = JenisProduk::orderBy('nama_jenis', 'asc')->get();
 
         return view('produk.create', compact('jenisProduks'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan produk baru.
      */
     public function store(StoreRequest $request)
     {
@@ -54,14 +53,17 @@ class ProdukController extends Controller
         $dataReq = $request->validated();
 
         $data = [
-            'nama'            => $dataReq['name'],
-            'jenis_produk_id' => $dataReq['jenis_produk_id'],
-            'harga_beli'      => $dataReq['purchase_price'],
-            'harga_jual'      => $dataReq['selling_price'],
-            'stok'             => $dataReq['stock'],
-            'user_id'          => auth()->id(),
+            'nama'             => $dataReq['name'],
+            'jenis_produk_id'  => $dataReq['jenis_produk_id'],
+            'harga_beli'       => $dataReq['purchase_price'],
+            'harga_jual'       => $dataReq['selling_price'],
+            'stok'              => $dataReq['stock'],
+            'user_id'           => auth()->id(),
         ];
 
+        /**
+         * Upload foto jika ada.
+         */
         if ($request->hasFile('foto')) {
             $data['foto'] = $request
                 ->file('foto')
@@ -76,10 +78,12 @@ class ProdukController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Menampilkan detail produk.
      */
     public function show(Produk $produk)
     {
+        $this->authorize('view', $produk);
+
         $produk->load([
             'user',
             'jenisProduk',
@@ -89,37 +93,47 @@ class ProdukController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Menampilkan form edit produk.
      */
     public function edit(Produk $produk)
     {
         $this->authorize('update', $produk);
 
-        // Mengambil data jenis produk dari tabel jenis
-        $jenisProduks = Jenis::orderBy('nama', 'asc')->get();
+        $jenisProduks = JenisProduk::orderBy('nama_jenis', 'asc')->get();
 
-        return view('produk.edit', compact('produk', 'jenisProduks'));
+        return view('produk.edit', compact(
+            'produk',
+            'jenisProduks'
+        ));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Mengupdate produk.
      */
-    public function update(UpdateRequest $request, Produk $produk)
-    {
+    public function update(
+        UpdateRequest $request,
+        Produk $produk
+    ) {
         $this->authorize('update', $produk);
 
         $dataReq = $request->validated();
 
         $data = [
-            'nama'            => $dataReq['name'],
-            'jenis_produk_id' => $dataReq['jenis_produk_id'],
-            'harga_beli'      => $dataReq['purchase_price'],
-            'harga_jual'      => $dataReq['selling_price'],
-            'stok'             => $dataReq['stock'],
+            'nama'             => $dataReq['name'],
+            'jenis_produk_id'  => $dataReq['jenis_produk_id'],
+            'harga_beli'       => $dataReq['purchase_price'],
+            'harga_jual'       => $dataReq['selling_price'],
+            'stok'              => $dataReq['stock'],
         ];
 
+        /**
+         * Jika upload foto baru.
+         */
         if ($request->hasFile('foto')) {
 
+            /**
+             * Hapus foto lama.
+             */
             if (
                 $produk->foto &&
                 Storage::disk('public')->exists($produk->foto)
@@ -127,6 +141,9 @@ class ProdukController extends Controller
                 Storage::disk('public')->delete($produk->foto);
             }
 
+            /**
+             * Simpan foto baru.
+             */
             $data['foto'] = $request
                 ->file('foto')
                 ->store('products', 'public');
@@ -140,12 +157,15 @@ class ProdukController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus produk.
      */
     public function destroy(Produk $produk)
     {
         $this->authorize('delete', $produk);
 
+        /**
+         * Hapus foto produk.
+         */
         if (
             $produk->foto &&
             Storage::disk('public')->exists($produk->foto)

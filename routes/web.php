@@ -28,45 +28,53 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/edit/{user}', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/update/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-       
     });
-     Route::middleware('role:admin,kasir')->group(function () {
 
-    Route::resource('/produk', ProdukController::class);
+    Route::middleware('role:admin,kasir')->group(function () {
 
-    Route::resource('/penjualan', PenjualanController::class);
+        Route::resource('/produk', ProdukController::class);
 
-    Route::resource('/itempenjualan', ItemPenjualanController::class);
+        Route::resource('/penjualan', PenjualanController::class);
 
-    Route::get('/tentang', [TentangController::class, 'index'])
-        ->name('tentang');
+        // =====================================================
+        // CETAK STRUK PENJUALAN
+        // =====================================================
+        Route::get(
+            '/penjualan/{penjualan}/struk',
+            [PenjualanController::class, 'struk']
+        )->name('penjualan.struk');
 
-    // =====================================================
-    // JENIS PRODUK - ADMIN & KASIR HANYA BISA MELIHAT
-    // =====================================================
-    Route::get('/jenis-produk', [JenisProdukController::class, 'index'])
-        ->name('jenis-produk.index');
-});
+        Route::resource('/itempenjualan', ItemPenjualanController::class);
+
+        Route::get('/tentang', [TentangController::class, 'index'])
+            ->name('tentang');
+
+        // =====================================================
+        // JENIS PRODUK - ADMIN & KASIR HANYA BISA MELIHAT
+        // =====================================================
+        Route::get('/jenis-produk', [JenisProdukController::class, 'index'])
+            ->name('jenis-produk.index');
+    });
 
 
-// =========================================================
-// JENIS PRODUK - KHUSUS ADMIN
-// =========================================================
-Route::middleware('role:admin')->group(function () {
+    // =========================================================
+    // JENIS PRODUK - KHUSUS ADMIN
+    // =========================================================
+    Route::middleware('role:admin')->group(function () {
 
-    Route::get('/jenis-produk/create', [JenisProdukController::class, 'create'])
-        ->name('jenis-produk.create');
+        Route::get('/jenis-produk/create', [JenisProdukController::class, 'create'])
+            ->name('jenis-produk.create');
 
-    Route::post('/jenis-produk', [JenisProdukController::class, 'store'])
-        ->name('jenis-produk.store');
+        Route::post('/jenis-produk', [JenisProdukController::class, 'store'])
+            ->name('jenis-produk.store');
 
-    Route::get('/jenis-produk/{jenisProduk}/edit', [JenisProdukController::class, 'edit'])
-        ->name('jenis-produk.edit');
+        Route::get('/jenis-produk/{jenisProduk}/edit', [JenisProdukController::class, 'edit'])
+            ->name('jenis-produk.edit');
 
-    Route::put('/jenis-produk/{jenisProduk}', [JenisProdukController::class, 'update'])
-        ->name('jenis-produk.update');
+        Route::put('/jenis-produk/{jenisProduk}', [JenisProdukController::class, 'update'])
+            ->name('jenis-produk.update');
 
-    Route::delete('/jenis-produk/{jenisProduk}', [JenisProdukController::class, 'destroy'])
-        ->name('jenis-produk.destroy');
-});
+        Route::delete('/jenis-produk/{jenisProduk}', [JenisProdukController::class, 'destroy'])
+            ->name('jenis-produk.destroy');
+    });
 });

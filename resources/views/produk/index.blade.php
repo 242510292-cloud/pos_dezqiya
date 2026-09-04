@@ -6,17 +6,22 @@
 
 @include('layouts.navbar')
 
-<h1 class="fw-bold text-primary">
+<div class="container mt-4">
+
+
+<h1 class="fw-bold text-primary mb-4">
     <i class="bi bi-box-seam me-2"></i>
     Produk
 </h1>
 
 @can('create', App\Models\Produk::class)
     <a href="{{ route('produk.create') }}" class="btn btn-primary mb-3">
+        <i class="bi bi-plus-circle me-1"></i>
         Create
     </a>
 @endcan
 
+{{-- Search --}}
 <form action="{{ route('produk.index') }}" method="GET" class="mb-3">
     <div class="input-group">
         <input
@@ -32,137 +37,149 @@
     </div>
 </form>
 
-<table class="table align-middle">
+{{-- Table --}}
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
 
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Foto</th>
-            <th>Nama</th>
-            <th>Jenis</th>
-            <th>Harga Beli</th>
-            <th>Harga Jual</th>
-            <th>Stok</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        @forelse ($products as $product)
-
+        <thead class="table-light">
             <tr>
+                <th>#</th>
+                <th>Foto</th>
+                <th>Nama</th>
+                <th>Jenis</th>
+                <th>Harga Beli</th>
+                <th>Harga Jual</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
 
-                <th>
-                    {{ $products->firstItem() + $loop->index }}
-                </th>
+        <tbody>
 
-                <td>
-                    @if($product->foto)
-                        <img
-                            src="{{ asset('storage/' . $product->foto) }}"
-                            width="100"
-                            height="100"
-                            class="img-thumbnail"
-                            style="object-fit: cover">
-                    @else
-                        <span class="text-muted">
-                            Tidak ada foto
-                        </span>
-                    @endif
-                </td>
+            @forelse ($products as $product)
 
-                <td>
-                    {{ $product->nama }}
-                </td>
+                <tr>
 
-                {{-- JENIS PRODUK --}}
-                <td>
-                    {{ $product->jenisProduk->nama ?? '-' }}
-                </td>
+                    {{-- Nomor --}}
+                    <th>
+                        {{ $products->firstItem() + $loop->index }}
+                    </th>
 
-                <td>
-                    Rp {{ number_format($product->harga_beli, 0, ',', '.') }}
-                </td>
+                    {{-- FOTO --}}
+                    <td>
+                        @if ($product->foto)
 
-                <td>
-                    Rp {{ number_format($product->harga_jual, 0, ',', '.') }}
-                </td>
+                            <img
+                                src="{{ asset('storage/' . $product->foto) }}"
+                                width="100"
+                                height="100"
+                                class="img-thumbnail"
+                                style="object-fit: cover;"
+                                alt="{{ $product->nama }}">
 
-                <td>
-                    {{ $product->stok }}
-                </td>
+                        @else
 
-                <td>
+                            <span class="text-muted">
+                                Tidak ada foto
+                            </span>
 
-                    <div class="d-flex gap-1">
+                        @endif
+                    </td>
 
-                        <a
-                            href="{{ route('produk.show', $product) }}"
-                            class="btn btn-info text-white">
-                            Detail
-                        </a>
+                    {{-- NAMA --}}
+                    <td>
+                        {{ $product->nama }}
+                    </td>
 
-                        @can('update', $product)
+                    {{-- JENIS PRODUK --}}
+                   <td>
+    {{ $product->jenisProduk?->nama_jenis ?? '-' }}
+</td>
 
+
+                    {{-- HARGA BELI --}}
+                    <td>
+                        Rp {{ number_format($product->harga_beli, 0, ',', '.') }}
+                    </td>
+
+                    {{-- HARGA JUAL --}}
+                    <td>
+                        Rp {{ number_format($product->harga_jual, 0, ',', '.') }}
+                    </td>
+
+                    {{-- STOK --}}
+                    <td>
+                        {{ $product->stok }}
+                    </td>
+
+                    {{-- AKSI --}}
+                    <td>
+                        <div class="d-flex gap-1">
+
+                            {{-- DETAIL --}}
                             <a
-                                href="{{ route('produk.edit', $product) }}"
+                                href="{{ route('produk.show', $product) }}"
                                 class="btn btn-info text-white">
-                                Edit
+                                Detail
                             </a>
 
-                        @endcan
+                            {{-- EDIT --}}
+                            @can('update', $product)
+                                <a
+                                    href="{{ route('produk.edit', $product) }}"
+                                    class="btn btn-info text-white">
+                                    Edit
+                                </a>
+                            @endcan
 
-                        @can('delete', $product)
+                            {{-- HAPUS --}}
+                            @can('delete', $product)
+                                <form
+                                    action="{{ route('produk.destroy', $product) }}"
+                                    method="POST"
+                                    class="d-inline">
 
-                            <form
-                                action="{{ route('produk.destroy', $product) }}"
-                                method="POST"
-                                class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
 
-                                @csrf
-                                @method('DELETE')
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary fw-bold"
+                                        onclick="return confirm('Apakah anda yakin akan menghapus produk ini?')">
+                                        Hapus
+                                    </button>
 
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary fw-bold"
-                                    onclick="return confirm('Apakah anda yakin akan menghapus produk ini?')">
-                                    Hapus
-                                </button>
+                                </form>
+                            @endcan
 
-                            </form>
+                        </div>
+                    </td>
 
-                        @endcan
+                </tr>
 
-                    </div>
+            @empty
 
-                </td>
+                <tr>
+                    <td colspan="8" class="text-center">
+                        <h4 class="py-3">
+                            Data tidak tersedia.
+                        </h4>
+                    </td>
+                </tr>
 
-            </tr>
+            @endforelse
 
-        @empty
+        </tbody>
 
-            <tr>
+    </table>
+</div>
 
-                <td colspan="8" class="text-center">
-
-                    <h4 class="py-3">
-                        Data tidak tersedia.
-                    </h4>
-
-                </td>
-
-            </tr>
-
-        @endforelse
-
-    </tbody>
-
-</table>
-
-{{-- Pagination Link --}}
+{{-- Pagination --}}
 <div class="d-flex justify-content-end">
     {{ $products->links() }}
+</div>
+
+
 </div>
 
 @endsection

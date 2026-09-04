@@ -12,24 +12,27 @@
         @csrf
 
         <div class="mb-3">
-            <label for="nama" class="form-label">
+
+            <label for="nama_jenis" class="form-label">
                 Nama Jenis Produk
             </label>
 
             <input
                 type="text"
-                name="nama"
-                id="nama"
-                class="form-control @error('nama') is-invalid @enderror"
-                value="{{ old('nama') }}"
+                name="nama_jenis"
+                id="nama_jenis"
+                class="form-control @error('nama_jenis') is-invalid @enderror"
+                value="{{ old('nama_jenis') }}"
                 placeholder="Masukkan nama jenis produk"
+                required
             >
 
-            @error('nama')
+            @error('nama_jenis')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>
             @enderror
+
         </div>
 
         <button type="submit" class="btn btn-primary">
@@ -39,6 +42,7 @@
         <a href="{{ route('jenis-produk.index') }}" class="btn btn-secondary">
             Kembali
         </a>
+
     </form>
 
 </div>
