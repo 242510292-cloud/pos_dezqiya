@@ -13,21 +13,21 @@
 
         <div class="mb-3">
 
-            <label for="nama_jenis" class="form-label">
+            <label for="nama" class="form-label">
                 Nama Jenis Produk
             </label>
 
             <input
                 type="text"
-                name="nama_jenis"
-                id="nama_jenis"
-                class="form-control @error('nama_jenis') is-invalid @enderror"
-                value="{{ old('nama_jenis') }}"
+                name="nama"
+                id="nama"
+                class="form-control @error('nama') is-invalid @enderror"
+                value="{{ old('nama') }}"
                 placeholder="Masukkan nama jenis produk"
                 required
             >
 
-            @error('nama_jenis')
+            @error('nama')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>

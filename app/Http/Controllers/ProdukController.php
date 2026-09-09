@@ -38,7 +38,7 @@ class ProdukController extends Controller
     {
         $this->authorize('create', Produk::class);
 
-        $jenisProduks = JenisProduk::orderBy('nama_jenis', 'asc')->get();
+        $jenisProduks = JenisProduk::orderBy('nama', 'asc')->get();
 
         return view('produk.create', compact('jenisProduks'));
     }
@@ -99,7 +99,7 @@ class ProdukController extends Controller
     {
         $this->authorize('update', $produk);
 
-        $jenisProduks = JenisProduk::orderBy('nama_jenis', 'asc')->get();
+        $jenisProduks = JenisProduk::orderBy('nama', 'asc')->get();
 
         return view('produk.edit', compact(
             'produk',

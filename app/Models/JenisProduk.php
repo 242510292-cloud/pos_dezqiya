@@ -11,7 +11,7 @@ class JenisProduk extends Model
     protected $table = 'jenis_produks';
 
     protected $fillable = [
-        'nama_jenis',
+        'nama',
         'user_id',
     ];
 

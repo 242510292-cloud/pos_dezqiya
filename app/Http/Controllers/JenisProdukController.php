@@ -19,7 +19,7 @@ class JenisProdukController extends Controller
         $jenisProduks = JenisProduk::with('user')
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where(
-                    'nama_jenis',
+                    'nama',
                     'like',
                     '%' . $keyword . '%'
                 );
@@ -52,16 +52,16 @@ class JenisProdukController extends Controller
         $this->authorize('create', JenisProduk::class);
 
         $validated = $request->validate([
-            'nama_jenis' => [
+            'nama' => [
                 'required',
                 'string',
                 'max:255',
-                'unique:jenis_produks,nama_jenis',
+                'unique:jenis_produks,nama',
             ],
         ]);
 
         JenisProduk::create([
-            'nama_jenis' => $validated['nama_jenis'],
+            'nama' => $validated['nama'],
             'user_id' => auth()->id(),
         ]);
 
@@ -114,16 +114,16 @@ class JenisProdukController extends Controller
         $this->authorize('update', $jenisProduk);
 
         $validated = $request->validate([
-            'nama_jenis' => [
+            'nama' => [
                 'required',
                 'string',
                 'max:255',
-                'unique:jenis_produks,nama_jenis,' . $jenisProduk->id,
+                'unique:jenis_produks,nama,' . $jenisProduk->id,
             ],
         ]);
 
         $jenisProduk->update([
-            'nama_jenis' => $validated['nama_jenis'],
+            'nama' => $validated['nama'],
         ]);
 
         return redirect()

@@ -30,6 +30,7 @@ return array(
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Policies\\DashboardPolicy' => $baseDir . '/app/Policies/DashboardPolicy.php',
     'App\\Policies\\ItemPenjualanPolicy' => $baseDir . '/app/Policies/ItemPenjualanPolicy.php',
+    'App\\Policies\\JenisProdukPolicy' => $baseDir . '/app/Policies/JenisProdukPolicy.php',
     'App\\Policies\\PenjualanPolicy' => $baseDir . '/app/Policies/PenjualanPolicy.php',
     'App\\Policies\\ProdukPolicy' => $baseDir . '/app/Policies/ProdukPolicy.php',
     'App\\Policies\\UserPolicy' => $baseDir . '/app/Policies/UserPolicy.php',

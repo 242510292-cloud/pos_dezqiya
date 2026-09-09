@@ -42,14 +42,14 @@
 
                   <input
     type="text"
-    name="nama_jenis"
-    id="nama_jenis"
-    class="form-control @error('nama_jenis') is-invalid @enderror"
-    value="{{ old('nama_jenis', $jenisProduk->nama_jenis) }}"
+    name="nama"
+    id="nama"
+    class="form-control @error('nama') is-invalid @enderror"
+    value="{{ old('nama', $jenisProduk->nama) }}"
     required
 >
 
-                    @error('nama_jenis')
+                    @error('nama')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>

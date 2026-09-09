@@ -113,7 +113,7 @@
                                 <td>
 
                                     <strong>
-                                        {{ $jenis->nama_jenis }}
+                                        {{ $jenis->nama }}
                                     </strong>
 
                                 </td>

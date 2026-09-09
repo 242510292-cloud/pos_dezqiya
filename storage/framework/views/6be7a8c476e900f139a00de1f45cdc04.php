@@ -71,7 +71,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo e(route('tentang')); ?>">
                          <i class="bi bi-person-vcard me-2"></i>
-                        Tentang
+                        Profile
                     </a>
                 </li>
 

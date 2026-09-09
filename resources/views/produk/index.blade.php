@@ -6,6 +6,10 @@
 
 @include('layouts.navbar')
 
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
+
 <div class="container mt-4">
 
 
@@ -68,21 +72,18 @@
                     {{-- FOTO --}}
                     <td>
                         @if ($product->foto)
-
                             <img
-                                src="{{ asset('storage/' . $product->foto) }}"
+                                src="{{ Storage::url($product->foto) }}"
                                 width="100"
                                 height="100"
                                 class="img-thumbnail"
                                 style="object-fit: cover;"
-                                alt="{{ $product->nama }}">
-
+                                alt="{{ $product->nama }}"
+                            >
                         @else
-
                             <span class="text-muted">
                                 Tidak ada foto
                             </span>
-
                         @endif
                     </td>
 
@@ -93,8 +94,8 @@
 
                     {{-- JENIS PRODUK --}}
                    <td>
-    {{ $product->jenisProduk?->nama_jenis ?? '-' }}
-</td>
+                        {{ $product->jenisProduk?->nama ?? '-' }}
+                    </td>
 
 
                     {{-- HARGA BELI --}}
@@ -174,12 +175,6 @@
     </table>
 </div>
 
-{{-- Pagination --}}
-<div class="d-flex justify-content-end">
-    {{ $products->links() }}
-</div>
 
-
-</div>
 
 @endsection
