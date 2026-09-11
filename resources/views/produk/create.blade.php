@@ -123,7 +123,7 @@
                 {{-- HARGA BELI --}}
                 <div class="mb-3">
                     <label for="purchase_price" class="form-label fw-bold">
-                        Harga Beli
+                        Harga pokok
                     </label>
 
                     <input
@@ -132,7 +132,7 @@
                         id="purchase_price"
                         class="form-control @error('purchase_price') is-invalid @enderror"
                         value="{{ old('purchase_price') }}"
-                        placeholder="Masukkan harga beli"
+                        placeholder="Masukkan harga pokok"
                     >
 
                     @error('purchase_price')

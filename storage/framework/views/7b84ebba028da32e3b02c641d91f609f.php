@@ -1,26 +1,20 @@
 
 
-
 <?php $__env->startSection('title', 'Dashboard'); ?>
-
-
-<?php echo $__env->make('layouts.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-
 
 <?php $__env->startSection('content'); ?>
 
+<?php echo $__env->make('layouts.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 <div class="text-center mb-5">
     <h1 class="fw-bold text-primary">
-         <i class="bi bi-house-heart-fill"></i>
+        <i class="bi bi-house-heart-fill"></i>
         Dashboard POS
     </h1>
-
 
     <h5 class="text-secondary">
         Ringkasan Hari Ini
     </h5>
-
 
     <p class="text-muted">
         <?php echo e($tanggalHariIni->translatedFormat('l, d F Y')); ?>
@@ -36,7 +30,7 @@
 
 
     <div class="col-12">
-        <h3 class="text-primary fw-bold">Today's Sales</h3>
+        <h3 class="text-primary fw-bold">Penjualan Hari Ini</h3>
     </div>
 
 
@@ -82,7 +76,7 @@
 
     <div class="col-12">
         <h3 class="text-primary fw-bold">
-            Cash & Payment Status
+          Metode Pembayaran Hari Ini
         </h3>
     </div>
 
@@ -132,7 +126,7 @@
 
     <div class="col-12">
         <h3 class="text-primary fw-bold">
-            Critical Inventory Status
+            Status Inventaris Kritis
         </h3>
     </div>
 

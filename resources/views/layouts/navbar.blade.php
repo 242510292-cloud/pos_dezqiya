@@ -1,4 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4 custom-navbar">
+<nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm mb-4 custom-navbar">
+
 
     <div class="container-fluid">
 
@@ -38,13 +39,18 @@
                     </a>
                 </li>
 
+@if(auth()->check() && auth()->user()->role->name === 'admin')
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.users') }}">
+            <i class="bi bi-tags me-2"></i>
+            Users
+        </a>
+    </li>
+@endif
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.users') }}">
-                        <i class="bi bi-person-vcard-fill"></i>
-                        Users
-                    </a>
-                </li>
+
+
+
 
                  <li class="nav-item">
                     <a class="nav-link" href="{{ route('jenis-produk.index') }}">
@@ -104,154 +110,43 @@
 
 
 <style>
-
-/* =========================================
-   NAVBAR UTAMA
-   ========================================= */
-
 .custom-navbar {
-
-    width: calc(100vw - 220px) !important;
-
-    max-width: none !important;
-
-    position: relative !important;
-
-    left: 50% !important;
-
-    transform: translateX(-50%) !important;
-
-    margin-left: 0 !important;
-
-    margin-right: 0 !important;
-
-    /* Jarak navbar dari atas */
-    margin-top: 24px !important;
-
+    width: calc(100% - 60px);
+    margin: 24px auto 20px auto !important;
     border-radius: 0 !important;
-
 }
-
-
-/* =========================================
-   CONTAINER NAVBAR
-   ========================================= */
 
 .custom-navbar .container-fluid {
-
-    width: 100% !important;
-
-    max-width: none !important;
-
     padding-left: 12px !important;
-
     padding-right: 12px !important;
-
 }
-
-
-/* =========================================
-   LOGO
-   ========================================= */
 
 .custom-navbar .navbar-logo {
-
     width: 38px;
-
     height: 38px;
-
     object-fit: contain;
-
     margin-right: 10px;
-
 }
-
-
-/* =========================================
-   POS
-   ========================================= */
 
 .custom-navbar .navbar-brand {
-
     margin-right: 20px !important;
-
-    display: flex;
-
-    align-items: center;
-
 }
-
-
-/* =========================================
-   MENU
-   ========================================= */
 
 .custom-navbar .nav-link {
-
     padding-left: 8px !important;
-
     padding-right: 8px !important;
-
 }
-
-
-/* =========================================
-   LOGOUT
-   ========================================= */
 
 .custom-navbar .btn {
-
     padding: 8px 14px !important;
-
     border-radius: 10px !important;
-
 }
 
-
-/* =========================================
-   TABLET
-   ========================================= */
-
-@media (max-width: 1200px) {
-
+@media (max-width: 767px) {
     .custom-navbar {
-
-        width: calc(100vw - 80px) !important;
-
+        width: calc(100% - 30px);
     }
-
 }
 
-
-/* =========================================
-   HP
-   ========================================= */
-
-@media (max-width: 768px) {
-
-    .custom-navbar {
-
-        width: calc(100vw - 30px) !important;
-
-    }
-
-}
-
-
-/* =========================================
-   HP KECIL
-   ========================================= */
-
-@media (max-width: 576px) {
-
-    .custom-navbar {
-
-        width: 100vw !important;
-
-        margin-top: 15px !important;
-
-    }
-
-}
 
 </style>

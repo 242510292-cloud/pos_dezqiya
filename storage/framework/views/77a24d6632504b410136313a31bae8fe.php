@@ -170,7 +170,7 @@ unset($__errorArgs, $__bag); ?>
                 
                 <div class="mb-3">
                     <label for="purchase_price" class="form-label fw-bold">
-                        Harga Beli
+                        Harga pokok
                     </label>
 
                     <input
@@ -186,7 +186,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>"
                         value="<?php echo e(old('purchase_price')); ?>"
-                        placeholder="Masukkan harga beli"
+                        placeholder="Masukkan harga pokok"
                     >
 
                     <?php $__errorArgs = ['purchase_price'];

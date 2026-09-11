@@ -49,55 +49,55 @@
 
 
                         <tr>
-                            <th width="200">Nama</th>
-                            <td>: DEZQIYA NUR ANNISA</td>
+                            <th width="200">Nama :</th>
+                            <td>DEZQIYA NUR ANNISA</td>
                         </tr>
 
 
                         <tr>
-                            <th>NIM</th>
-                            <td>: 242510292</td>
+                            <th>NIM :</th>
+                            <td>242510292</td>
                         </tr>
 
 
                         <tr>
-                            <th>Kelas</th>
-                            <td>: XII PPLG 4</td>
+                            <th>Kelas :</th>
+                            <td>XII PPLG 4</td>
                         </tr>
 
 
                         <tr>
-                            <th>Program Studi</th>
-                            <td>: Pengembangan Perangkat Lunak dan Gim</td>
+                            <th>Program Studi :</th>
+                            <td>Pengembangan Perangkat Lunak dan Gim</td>
                         </tr>
 
 
                         <tr>
-                            <th>Universitas</th>
-                            <td>: SMKN 4 TASIKMALAYA</td>
+                            <th>Universitas :</th>
+                            <td>SMKN 4 TASIKMALAYA</td>
                         </tr>
 
 
                        <tr>
-                       <th>Email</th>
-                            <td>: {{ auth()->user()->email }}</td>
+                       <th>Email :</th>
+                            <td>{{ auth()->user()->email }}</td>
                         </tr>
 
 
                         <tr>
-                            <th>No. HP</th>
-                            <td>: 0856-2444-8838</td>
+                            <th>No. HP :</th>
+                            <td>0856-2444-8838</td>
                         </tr>
 
 
                         <tr>
-                            <th>Alamat</th>
-                            <td>: jln.bebedahan1,kp.sukasirna.</td>
+                            <th>Alamat :</th>
+                            <td>jln.bebedahan1,kp.sukasirna.</td>
                         </tr>
 
 
                         <tr>
-                            <th>Tentang</th>
+                            <th>Tentang :</th>
 
                             <td>
                                 Saya merupakan mahasiswa Program Studi Sistem Informasi
@@ -105,7 +105,7 @@
                                 menggunakan Laravel sebagai tugas pelajar.
                             </td>
 
-                        </tr>
+                      </tr>
 
 
                     </table>
@@ -113,6 +113,53 @@
 
                 </div>
 
+              {{-- TENTANG APLIKASI --}}
+    <div class="col-12 mt-3">
+
+        <table class="table w-100">
+
+            <tr>
+                <th style="width: 200px;">
+                    Tentang aplikasi :
+                </th>
+
+                <td style="text-align: justify; line-height: 1.7;">
+
+                    Aplikasi POS (Point of Sale) adalah sistem kasir
+                    berbasis web yang digunakan untuk mengelola produk,
+                    stok, pengguna, dan transaksi penjualan.
+
+                    Pada halaman Dashboard, pengguna dapat melihat
+                    ringkasan penjualan harian, jumlah transaksi,
+                    total pembayaran tunai dan non-tunai, serta
+                    kondisi stok produk.
+
+                    Menu Users digunakan untuk mengelola pengguna,
+                    Jenis Produk untuk mengatur kategori, dan Produk
+                    untuk mengelola data serta stok barang.
+
+                    Menu <strong>Penjualan</strong> digunakan untuk
+                    memilih produk, menentukan jumlah barang,
+                    menghitung subtotal dan total pembayaran,
+                    memilih metode pembayaran Cash atau QRIS,
+                    serta melakukan checkout.
+
+                    Untuk pembayaran Cash, sistem dapat menghitung
+                    uang yang dibayar dan kembalian secara otomatis.
+
+                    Aplikasi juga menyediakan fitur Detail, Edit,
+                    Hapus/Batal Transaksi, Profile, dan Logout
+                    sehingga proses pengelolaan penjualan menjadi
+                    lebih mudah, cepat, dan terorganisir.
+
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
 
             </div>
 

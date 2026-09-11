@@ -21,15 +21,17 @@ class PenjualanController extends Controller
 
         $sales = Penjualan::query()
 
-            // Filter berdasarkan role
             ->when($user->role->name === 'kasir', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
 
-            // Search nama user
             ->when($keyword, function ($query) use ($keyword) {
                 $query->whereHas('user', function ($q) use ($keyword) {
-                    $q->where('name', 'like', '%' . $keyword . '%');
+                    $q->where(
+                        'name',
+                        'like',
+                        '%' . $keyword . '%'
+                    );
                 });
             })
 
@@ -37,7 +39,10 @@ class PenjualanController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('penjualan.index', compact('sales'));
+        return view(
+            'penjualan.index',
+            compact('sales')
+        );
     }
 
 
@@ -57,15 +62,15 @@ class PenjualanController extends Controller
             ]
         );
 
-
         $keyword = $request->input('search');
-
 
         if ($keyword) {
 
-            $products = Produk::when($keyword, function ($query) use ($keyword) {
-                $query->where('nama', 'like', '%' . $keyword . '%');
-            })
+            $products = Produk::where(
+                'nama',
+                'like',
+                '%' . $keyword . '%'
+            )
             ->orderBy('nama')
             ->get();
 
@@ -75,12 +80,17 @@ class PenjualanController extends Controller
 
         }
 
-
         $mode = 'create';
 
-        return view('penjualan.pos', compact('sale', 'products', 'mode'));
+        return view(
+            'penjualan.pos',
+            compact(
+                'sale',
+                'products',
+                'mode'
+            )
+        );
     }
-
 
 
     /**
@@ -90,7 +100,6 @@ class PenjualanController extends Controller
     {
         //
     }
-
 
 
     /**
@@ -103,7 +112,10 @@ class PenjualanController extends Controller
             'itemPenjualan.produk'
         );
 
-        return view('penjualan.show', compact('penjualan'));
+        return view(
+            'penjualan.show',
+            compact('penjualan')
+        );
     }
 
 
@@ -117,10 +129,11 @@ class PenjualanController extends Controller
             'itemPenjualan.produk'
         );
 
-        return view('penjualan.struk', compact('penjualan'));
+        return view(
+            'penjualan.struk',
+            compact('penjualan')
+        );
     }
-
-
 
 
     /**
@@ -130,9 +143,10 @@ class PenjualanController extends Controller
     {
         $sale = $penjualan;
 
-
-        abort_if($sale->status === 'COMPLETED', 403);
-
+        abort_if(
+            $sale->status === 'COMPLETED',
+            403
+        );
 
         $sale->load('itemPenjualan');
 
@@ -140,127 +154,332 @@ class PenjualanController extends Controller
 
         $mode = 'edit';
 
-
-        return view('penjualan.pos', compact('sale', 'products', 'mode'));
+        return view(
+            'penjualan.pos',
+            compact(
+                'sale',
+                'products',
+                'mode'
+            )
+        );
     }
 
 
-
-
-
     /**
-     * Update the specified resource in storage.
+     * UPDATE / CHECKOUT
      */
-    public function update(Request $request, Penjualan $penjualan)
-    {
+    public function update(
+        Request $request,
+        Penjualan $penjualan
+    ) {
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDASI
+        |--------------------------------------------------------------------------
+        */
 
         $request->validate([
             'payment_method' => 'required|in:CASH,QRIS'
         ]);
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | CEK STATUS
+        |--------------------------------------------------------------------------
+        */
+
         if ($penjualan->status !== 'OPEN') {
 
-            return back()->with('errors', 'Transaksi sudah diproses');
+            return back()->with(
+                'errors',
+                'Transaksi sudah diproses'
+            );
 
         }
 
 
-        if ($penjualan->itemPenjualan()->count() === 0) {
+        /*
+        |--------------------------------------------------------------------------
+        | CEK KERANJANG
+        |--------------------------------------------------------------------------
+        */
 
-            return back()->with('errors', 'Keranjang masih kosong');
+        if (
+            $penjualan
+                ->itemPenjualan()
+                ->count() === 0
+        ) {
+
+            return back()->with(
+                'errors',
+                'Keranjang masih kosong'
+            );
 
         }
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | HITUNG TOTAL
+        |--------------------------------------------------------------------------
+        */
 
-        DB::transaction(function () use ($penjualan, $request) {
+        $total = $penjualan
+            ->itemPenjualan()
+            ->sum('subtotal');
 
 
-            $total = $penjualan->itemPenjualan()
-                ->sum('subtotal');
+        /*
+        |--------------------------------------------------------------------------
+        | PEMBAYARAN QRIS
+        |--------------------------------------------------------------------------
+        */
 
+        if ($request->payment_method === 'QRIS') {
+
+            /*
+             * Simpan metode pembayaran dan total.
+             *
+             * STATUS MASIH OPEN.
+             */
 
             $penjualan->update([
-
-                'metode_pembayaran' => $request->payment_method,
-
-                'total_pembayaran' => $total,
-
-                'status' => 'COMPLETED'
-
+                'metode_pembayaran' => 'QRIS',
+                'total_pembayaran' => $total
             ]);
 
+
+            /*
+             |--------------------------------------------------------------------------
+             | DATA QR
+             |--------------------------------------------------------------------------
+             |
+             | Data ini akan dikirim ke qris.blade.php.
+             | QR Code dibuat menggunakan JavaScript.
+             |
+             */
+
+            $qrData = json_encode([
+                'merchant' => 'POS INVENTORY',
+                'transaction_id' => $penjualan->id,
+                'amount' => $total,
+                'currency' => 'IDR'
+            ]);
+
+
+            /*
+             |--------------------------------------------------------------------------
+             | TAMPILKAN HALAMAN QRIS
+             |--------------------------------------------------------------------------
+             */
+
+            return view(
+                'penjualan.qris',
+                compact(
+                    'penjualan',
+                    'total',
+                    'qrData'
+                )
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PEMBAYARAN CASH
+        |--------------------------------------------------------------------------
+        */
+
+        DB::transaction(function () use (
+            $penjualan,
+            $total
+        ) {
+
+            $penjualan->update([
+                'metode_pembayaran' => 'CASH',
+                'total_pembayaran' => $total,
+                'status' => 'COMPLETED'
+            ]);
 
         });
 
 
-
         return redirect()
             ->route('penjualan.index')
-            ->with('success', 'Transaksi berhasil diselesaikan');
-
+            ->with(
+                'success',
+                'Transaksi berhasil diselesaikan'
+            );
     }
 
 
+    /**
+     * KONFIRMASI PEMBAYARAN QRIS
+     */
+    public function confirmQris(
+        Penjualan $penjualan
+    ) {
+        /*
+        |--------------------------------------------------------------------------
+        | CEK STATUS
+        |--------------------------------------------------------------------------
+        */
 
+        if ($penjualan->status !== 'OPEN') {
+
+            return redirect()
+                ->route('penjualan.index')
+                ->with(
+                    'errors',
+                    'Transaksi sudah diproses'
+                );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CEK METODE PEMBAYARAN
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $penjualan->metode_pembayaran !== 'QRIS'
+        ) {
+
+            return redirect()
+                ->route('penjualan.index')
+                ->with(
+                    'errors',
+                    'Metode pembayaran bukan QRIS'
+                );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CEK ITEM
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $penjualan
+                ->itemPenjualan()
+                ->count() === 0
+        ) {
+
+            return redirect()
+                ->route('penjualan.index')
+                ->with(
+                    'errors',
+                    'Keranjang masih kosong'
+                );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SELESAIKAN TRANSAKSI
+        |--------------------------------------------------------------------------
+        */
+
+        DB::transaction(function () use (
+            $penjualan
+        ) {
+
+            $total = $penjualan
+                ->itemPenjualan()
+                ->sum('subtotal');
+
+
+            $penjualan->update([
+                'metode_pembayaran' => 'QRIS',
+                'total_pembayaran' => $total,
+                'status' => 'COMPLETED'
+            ]);
+
+        });
+
+
+        return redirect()
+            ->route('penjualan.index')
+            ->with(
+                'success',
+                'Pembayaran QRIS berhasil dikonfirmasi'
+            );
+    }
 
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Penjualan $penjualan)
-    {
-
-        $this->authorize('delete', $penjualan);
-
+    public function destroy(
+        Penjualan $penjualan
+    ) {
+        $this->authorize(
+            'delete',
+            $penjualan
+        );
 
 
         if ($penjualan->status !== 'OPEN') {
 
             return redirect()
                 ->route('penjualan.index')
-                ->with('errors', 'Transaksi sudah selesai tidak bisa dibatalkan');
+                ->with(
+                    'errors',
+                    'Transaksi sudah selesai tidak bisa dibatalkan'
+                );
 
         }
 
 
+        DB::transaction(function () use (
+            $penjualan
+        ) {
 
+            /*
+             * Kembalikan stok
+             */
 
-        DB::transaction(function () use ($penjualan) {
+            foreach (
+                $penjualan->itemPenjualan as $item
+            ) {
 
-
-            foreach ($penjualan->itemPenjualan as $item) {
-
-
-                // kembalikan stok
                 $item->produk->increment(
                     'stok',
                     $item->kuantitas
                 );
 
-
             }
 
 
+            /*
+             * Hapus item
+             */
 
-            // hapus item
-            $penjualan->itemPenjualan()->delete();
+            $penjualan
+                ->itemPenjualan()
+                ->delete();
 
 
+            /*
+             * Hapus penjualan
+             */
 
-            // hapus penjualan
             $penjualan->delete();
-
 
         });
 
 
-
         return redirect()
             ->route('penjualan.index')
-            ->with('success', 'Transaksi berhasil dibatalkan');
-
+            ->with(
+                'success',
+                'Transaksi berhasil dibatalkan'
+            );
     }
-
 }
