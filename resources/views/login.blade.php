@@ -93,7 +93,7 @@
 
         <div class="login-header">
             <div class="logo">🛒</div>
-            <h1 style="color: orange;">DailyMart⭐</h1>
+            <h1 style="color: orange;">DailyMart</h1>
             <small>Silakan login untuk melanjutkan</small>
         </div>
 

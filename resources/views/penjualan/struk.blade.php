@@ -136,7 +136,7 @@
         {{-- HEADER --}}
         <div class="header center">
 
-            <h2>DailyMart⭐</h2>
+            <h2>DailyMart</h2>
 
             <p>STRUK PENJUALAN</p>
 

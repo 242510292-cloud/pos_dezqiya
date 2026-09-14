@@ -161,7 +161,7 @@
 <div class="qris-card">
 
     <div class="logo">
-       DailyMart⭐
+       DailyMart
     </div>
 
     <div class="title">
