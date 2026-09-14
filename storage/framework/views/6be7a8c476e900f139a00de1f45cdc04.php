@@ -4,16 +4,19 @@
     <div class="container-fluid">
 
         
-        <a class="navbar-brand fw-bold d-flex align-items-center"
-           href="<?php echo e(url('/dashboard')); ?>">
+<a class="navbar-brand fw-bold d-flex align-items-center"
+href="<?php echo e(route('info')); ?>">
 
-            <img src="<?php echo e(asset('images/logo2.jpg')); ?>"
-                 alt="Logo POS"
-                 class="navbar-logo">
+<img src="<?php echo e(asset('images/logo2.jpg')); ?>"
+alt="Logo POS"
+class="navbar-logo">
 
-            <span>POS</span>
+<span>POS</span>
 
-        </a>
+</a>
+
+
+          
 
 
         

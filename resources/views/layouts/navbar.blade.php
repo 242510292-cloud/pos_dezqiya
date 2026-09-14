@@ -4,16 +4,19 @@
     <div class="container-fluid">
 
         {{-- LOGO + POS --}}
-        <a class="navbar-brand fw-bold d-flex align-items-center"
-           href="{{ url('/dashboard') }}">
+<a class="navbar-brand fw-bold d-flex align-items-center"
+href="{{ route('info') }}">
 
-            <img src="{{ asset('images/logo2.jpg') }}"
-                 alt="Logo POS"
-                 class="navbar-logo">
+<img src="{{ asset('images/logo2.jpg') }}"
+alt="Logo POS"
+class="navbar-logo">
 
-            <span>POS</span>
+<span>POS</span>
 
-        </a>
+</a>
+
+
+          
 
 
         {{-- TOMBOL MOBILE --}}

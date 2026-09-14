@@ -9,6 +9,9 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\TentangController;
+use App\Http\Controllers\InfoController;
+
+
 
 
 // =========================================================
@@ -213,6 +216,12 @@ Route::middleware('auth')->group(function () {
             '/jenis-produk/{jenisProduk}',
             [JenisProdukController::class, 'destroy']
         )->name('jenis-produk.destroy');
+
+ Route::get(
+            '/info',
+            [InfoController::class, 'index']
+        )->name('info');
+
     });
 
 });
