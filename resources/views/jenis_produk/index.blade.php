@@ -102,7 +102,7 @@
                                     @else
 
                                         <span class="text-muted">
-                                            Data lama
+                                            Admin
                                         </span>
 
                                     @endif

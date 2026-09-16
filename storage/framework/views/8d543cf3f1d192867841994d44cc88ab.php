@@ -105,7 +105,7 @@
                                     <?php else: ?>
 
                                         <span class="text-muted">
-                                            Data lama
+                                            Admin
                                         </span>
 
                                     <?php endif; ?>

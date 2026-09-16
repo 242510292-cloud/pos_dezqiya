@@ -534,6 +534,7 @@ class ComposerStaticInitd8f67b824a1bf31c8999ead558d9b485
         'App\\Http\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/DashboardController.php',
+        'App\\Http\\Controllers\\InfoController' => __DIR__ . '/../..' . '/app/Http/Controllers/InfoController.php',
         'App\\Http\\Controllers\\ItemPenjualanController' => __DIR__ . '/../..' . '/app/Http/Controllers/ItemPenjualanController.php',
         'App\\Http\\Controllers\\JenisProdukController' => __DIR__ . '/../..' . '/app/Http/Controllers/JenisProdukController.php',
         'App\\Http\\Controllers\\PenjualanController' => __DIR__ . '/../..' . '/app/Http/Controllers/PenjualanController.php',
