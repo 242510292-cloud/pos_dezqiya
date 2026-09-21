@@ -170,7 +170,7 @@ unset($__errorArgs, $__bag); ?>
                 
                 <div class="mb-3">
                     <label for="purchase_price" class="form-label fw-bold">
-                        Harga pokok
+                        Harga Pokok
                     </label>
 
                     <input
@@ -224,6 +224,7 @@ endif;
 unset($__errorArgs, $__bag); ?>"
                         value="<?php echo e(old('selling_price')); ?>"
                         placeholder="Masukkan harga jual"
+                        readonly="readonly"
                     >
 
                     <?php $__errorArgs = ['selling_price'];

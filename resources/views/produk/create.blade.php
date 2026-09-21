@@ -120,10 +120,10 @@
 </div>
 
 
-                {{-- HARGA BELI --}}
+                {{-- HARGA Pokok --}}
                 <div class="mb-3">
                     <label for="purchase_price" class="form-label fw-bold">
-                        Harga pokok
+                        Harga Pokok
                     </label>
 
                     <input
@@ -155,6 +155,7 @@
                         class="form-control @error('selling_price') is-invalid @enderror"
                         value="{{ old('selling_price') }}"
                         placeholder="Masukkan harga jual"
+                        readonly="readonly"
                     >
 
                     @error('selling_price')

@@ -265,6 +265,36 @@
                     @csrf
                     @method('PUT')
 
+                    {{-- DISKON --}}
+                    <select name="payment_method"
+                            id="payment_method"
+                            class="form-select mb-3"
+                            required>
+
+                        <option value="">
+                            Pilih Diskon
+                        </option>
+
+                        <option value="CASH">
+                           5%
+                        </option>
+
+                        <option value="CASH">
+                           10%
+                        </option>
+
+
+                    </select>
+
+                    {{-- ================================================= --}}
+                    {{-- DISKON 5% --}}
+                    {{-- ================================================= --}}
+                   Discount 5%: Rp {{ number_format($sale->total_pembayaran * 0.05, 0, ',', '.') }}
+
+                    {{-- ================================================= --}}
+                    {{-- DISKON 10% --}}
+                    {{-- ================================================= --}}
+                     Discount 10%: Rp {{ number_format($sale->total_pembayaran * 0.10, 0, ',', '.') }}
 
                     {{-- METODE PEMBAYARAN --}}
                     <select name="payment_method"
@@ -286,7 +316,7 @@
 
                     </select>
 
-
+                  
                     {{-- ================================================= --}}
                     {{-- PEMBAYARAN CASH --}}
                     {{-- ================================================= --}}
@@ -309,6 +339,7 @@
                                min="0"
                                step="1">
 
+                              
 
                         {{-- KEMBALIAN --}}
                         <div class="alert alert-success">

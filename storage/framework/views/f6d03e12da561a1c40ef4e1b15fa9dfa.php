@@ -271,6 +271,38 @@
                     <?php echo csrf_field(); ?>
                     <?php echo method_field('PUT'); ?>
 
+                    
+                    <select name="payment_method"
+                            id="payment_method"
+                            class="form-select mb-3"
+                            required>
+
+                        <option value="">
+                            Pilih Diskon
+                        </option>
+
+                        <option value="CASH">
+                           5%
+                        </option>
+
+                        <option value="CASH">
+                           10%
+                        </option>
+
+
+                    </select>
+
+                    
+                    
+                    
+                   Discount 5%: Rp <?php echo e(number_format($sale->total_pembayaran * 0.05, 0, ',', '.')); ?>
+
+
+                    
+                    
+                    
+                     Discount 10%: Rp <?php echo e(number_format($sale->total_pembayaran * 0.10, 0, ',', '.')); ?>
+
 
                     
                     <select name="payment_method"
@@ -292,7 +324,7 @@
 
                     </select>
 
-
+                  
                     
                     
                     
@@ -315,6 +347,7 @@
                                min="0"
                                step="1">
 
+                              
 
                         
                         <div class="alert alert-success">

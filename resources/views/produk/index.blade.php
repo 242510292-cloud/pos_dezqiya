@@ -51,7 +51,7 @@
                 <th>Foto</th>
                 <th>Nama</th>
                 <th>Jenis</th>
-                <th>Harga Beli</th>
+                <th>Harga Pokok</th>
                 <th>Harga Jual</th>
                 <th>Stok</th>
                 <th>Aksi</th>
@@ -105,7 +105,7 @@
 
                     {{-- HARGA JUAL --}}
                     <td>
-                        Rp {{ number_format($product->harga_jual, 0, ',', '.') }}
+                        Rp {{ number_format($product->harga_jual, 0, ',', '.') }}                  
                     </td>
 
                     {{-- STOK --}}

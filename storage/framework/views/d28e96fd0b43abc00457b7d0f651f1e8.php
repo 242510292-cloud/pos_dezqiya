@@ -137,11 +137,11 @@ unset($__errorArgs, $__bag); ?>
 
     
     <div class="col-12 mb-3">
-        <label class="form-label">Harga Beli</label>
+        <label class="form-label">Harga Pokok</label>
 
         <input type="number"
-               name="purchase_price"
-               class="form-control <?php $__errorArgs = ['purchase_price'];
+               name="cost_price"
+               class="form-control <?php $__errorArgs = ['cost_price'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -149,9 +149,9 @@ $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>"
-               value="<?php echo e(old('purchase_price', $produk->harga_beli ?? '')); ?>">
+               value="<?php echo e(old('cost_price', $produk->harga_pokok ?? '')); ?>">
 
-        <?php $__errorArgs = ['purchase_price'];
+        <?php $__errorArgs = ['cost_price'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
