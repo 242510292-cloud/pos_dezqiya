@@ -55,7 +55,6 @@
                            name="product_id"
                            value="{{ $product->id }}">
 
-
                     {{-- PRODUK --}}
                     <div class="col-7">
 
@@ -87,7 +86,6 @@
 
                     </div>
 
-
                     {{-- QUANTITY --}}
                     <div class="col-3">
 
@@ -99,15 +97,12 @@
 
                     </div>
 
-
-                    {{-- TOMBOL TAMBAH --}}
+                    {{-- TAMBAH --}}
                     <div class="col-2">
 
                         <button type="submit"
                                 class="btn btn-primary w-100">
-
                             +
-
                         </button>
 
                     </div>
@@ -130,24 +125,20 @@
 
         <div class="card">
 
-
             {{-- TABEL KERANJANG --}}
             <table class="table table-bordered mb-0">
 
                 <thead>
 
                     <tr>
-
                         <th>Produk</th>
                         <th>Harga</th>
                         <th>Qty</th>
                         <th>Subtotal</th>
                         <th>Aksi</th>
-
                     </tr>
 
                 </thead>
-
 
                 <tbody>
 
@@ -155,17 +146,15 @@
 
                 <tr>
 
-                    {{-- NAMA PRODUK --}}
+                    {{-- NAMA --}}
                     <td>
                         {{ $item->produk->nama }}
                     </td>
-
 
                     {{-- HARGA --}}
                     <td>
                         Rp {{ number_format($item->produk->harga_jual, 0, ',', '.') }}
                     </td>
-
 
                     {{-- QTY --}}
                     <td>
@@ -187,14 +176,10 @@
 
                     </td>
 
-
                     {{-- SUBTOTAL --}}
                     <td>
-
                         Rp {{ number_format($item->subtotal, 0, ',', '.') }}
-
                     </td>
-
 
                     {{-- HAPUS --}}
                     <td>
@@ -209,9 +194,7 @@
 
                             <button type="submit"
                                     class="btn btn-danger btn-sm">
-
                                 Hapus
-
                             </button>
 
                         </form>
@@ -247,16 +230,26 @@
             {{-- ================================================= --}}
             <div class="card-footer">
 
-                {{-- TOTAL --}}
-                <h5 class="fw-bold">
+                {{-- TOTAL BELANJA --}}
+                <div class="mb-3">
 
-                    Total:
-                    Rp {{ number_format($sale->total_pembayaran, 0, ',', '.') }}
+                    <span class="text-muted">
+                        Total Belanja
+                    </span>
 
-                </h5>
+                    <h5 class="fw-bold mb-0">
+
+                        Rp {{ number_format($sale->total_pembayaran, 0, ',', '.') }}
+
+                    </h5>
+
+                </div>
 
 
+                {{-- ================================================= --}}
                 {{-- FORM CHECKOUT --}}
+                {{-- ================================================= --}}
+
                 <form method="POST"
                       action="{{ route('penjualan.update', $sale->id) }}"
                       id="checkout-form"
@@ -265,38 +258,94 @@
                     @csrf
                     @method('PUT')
 
+
+                    {{-- ================================================= --}}
                     {{-- DISKON --}}
-                    <select name="payment_method"
-                            id="payment_method"
-                            class="form-select mb-3"
-                            required>
+                    {{-- ================================================= --}}
 
-                        <option value="">
-                            Pilih Diskon
+                    <label for="discount_percent"
+                           class="form-label fw-bold">
+
+                        Diskon
+
+                    </label>
+
+                    <select name="discount_percent"
+                            id="discount_percent"
+                            class="form-select mb-3">
+
+                        <option value="0">
+                            Tanpa Diskon
                         </option>
 
-                        <option value="CASH">
-                           5%
+                        <option value="5">
+                            Diskon 5%
                         </option>
 
-                        <option value="CASH">
-                           10%
+                        <option value="10">
+                            Diskon 10%
                         </option>
-
 
                     </select>
 
-                    {{-- ================================================= --}}
-                    {{-- DISKON 5% --}}
-                    {{-- ================================================= --}}
-                   Discount 5%: Rp {{ number_format($sale->total_pembayaran * 0.05, 0, ',', '.') }}
+
+                    {{-- NILAI DISKON --}}
+                    <div class="alert alert-warning mb-2">
+
+                        <div class="d-flex justify-content-between">
+
+                            <span>
+                                Diskon
+                            </span>
+
+                            <strong id="discount-amount">
+                                Rp 0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    {{-- TOTAL BAYAR --}}
+                    <div class="alert alert-primary">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <span class="fw-bold">
+                                Total Bayar
+                            </span>
+
+                            <strong id="final-total"
+                                    class="fs-4">
+
+                                Rp {{ number_format($sale->total_pembayaran, 0, ',', '.') }}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    {{-- DATA DISKON YANG DIKIRIM KE SERVER --}}
+                    <input type="hidden"
+                           name="discount_amount"
+                           id="discount_amount"
+                           value="0">
+
 
                     {{-- ================================================= --}}
-                    {{-- DISKON 10% --}}
-                    {{-- ================================================= --}}
-                     Discount 10%: Rp {{ number_format($sale->total_pembayaran * 0.10, 0, ',', '.') }}
-
                     {{-- METODE PEMBAYARAN --}}
+                    {{-- ================================================= --}}
+
+                    <label for="payment_method"
+                           class="form-label fw-bold">
+
+                        Metode Pembayaran
+
+                    </label>
+
                     <select name="payment_method"
                             id="payment_method"
                             class="form-select mb-3"
@@ -316,10 +365,11 @@
 
                     </select>
 
-                  
+
                     {{-- ================================================= --}}
-                    {{-- PEMBAYARAN CASH --}}
+                    {{-- CASH --}}
                     {{-- ================================================= --}}
+
                     <div id="cash-payment"
                          style="display:none;">
 
@@ -330,7 +380,6 @@
 
                         </label>
 
-
                         <input type="number"
                                name="uang_dibayar"
                                id="uang_dibayar"
@@ -339,7 +388,6 @@
                                min="0"
                                step="1">
 
-                              
 
                         {{-- KEMBALIAN --}}
                         <div class="alert alert-success">
@@ -369,8 +417,9 @@
 
 
                     {{-- ================================================= --}}
-                    {{-- TOMBOL CHECKOUT --}}
+                    {{-- CHECKOUT --}}
                     {{-- ================================================= --}}
+
                     <button type="submit"
                             id="checkout-button"
                             class="btn btn-success w-100">
@@ -385,6 +434,7 @@
                 {{-- ================================================= --}}
                 {{-- BATAL TRANSAKSI --}}
                 {{-- ================================================= --}}
+
                 @can('delete', $sale)
 
                 <form method="POST"
@@ -407,8 +457,9 @@
 
 
                 {{-- ================================================= --}}
-                {{-- TOMBOL KEMBALI --}}
+                {{-- KEMBALI --}}
                 {{-- ================================================= --}}
+
                 <div class="mt-4">
 
                     <a href="{{ url('/penjualan') }}"
@@ -430,12 +481,24 @@
 
 
 {{-- ============================================================= --}}
-{{-- JAVASCRIPT PEMBAYARAN --}}
+{{-- JAVASCRIPT --}}
 {{-- ============================================================= --}}
 
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
+
+    const discountPercent =
+        document.getElementById('discount_percent');
+
+    const discountAmount =
+        document.getElementById('discount-amount');
+
+    const discountAmountInput =
+        document.getElementById('discount_amount');
+
+    const finalTotal =
+        document.getElementById('final-total');
 
     const paymentMethod =
         document.getElementById('payment_method');
@@ -456,75 +519,93 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('checkout-button');
 
 
-    // Total transaksi dari Laravel
-    const total =
+    // =========================================================
+    // TOTAL AWAL
+    // =========================================================
+
+    const totalAwal =
         {{ (int) $sale->total_pembayaran }};
 
 
-    // =============================================================
+    // =========================================================
     // FORMAT RUPIAH
-    // =============================================================
+    // =========================================================
 
     function formatRupiah(angka) {
 
-        return 'Rp ' + Number(angka).toLocaleString('id-ID');
+        return 'Rp ' +
+            Number(angka).toLocaleString('id-ID');
 
     }
 
 
-    // =============================================================
-    // PILIH METODE PEMBAYARAN
-    // =============================================================
+    // =========================================================
+    // HITUNG TOTAL SETELAH DISKON
+    // =========================================================
 
-    paymentMethod.addEventListener('change', function () {
+    function hitungTotal() {
 
-        if (this.value === 'CASH') {
+        const persen =
+            Number(discountPercent.value) || 0;
 
-            // Tampilkan pembayaran cash
-            cashPayment.style.display = 'block';
+        const diskon =
+            Math.round(
+                totalAwal * persen / 100
+            );
 
-            uangDibayar.required = true;
+        const totalAkhir =
+            totalAwal - diskon;
 
-            // Checkout awalnya disabled
-            checkoutButton.disabled = true;
 
-            // Fokus ke input uang
-            uangDibayar.focus();
+        // Tampilkan diskon
+        discountAmount.textContent =
+            formatRupiah(diskon);
 
-        } else {
 
-            // Sembunyikan pembayaran cash
-            cashPayment.style.display = 'none';
+        // Tampilkan total
+        finalTotal.textContent =
+            formatRupiah(totalAkhir);
 
-            uangDibayar.required = false;
 
-            uangDibayar.value = '';
+        // Simpan nilai diskon
+        discountAmountInput.value =
+            diskon;
 
-            kembalian.textContent =
-                'Rp 0';
 
-            uangKurang.style.display =
-                'none';
+        // Hitung kembali uang cash
+        hitungKembalian();
 
-            // QRIS bisa checkout
-            checkoutButton.disabled = false;
+    }
+
+
+    // =========================================================
+    // HITUNG KEMBALIAN
+    // =========================================================
+
+    function hitungKembalian() {
+
+        const persen =
+            Number(discountPercent.value) || 0;
+
+        const diskon =
+            Math.round(
+                totalAwal * persen / 100
+            );
+
+        const totalAkhir =
+            totalAwal - diskon;
+
+        const dibayar =
+            Number(uangDibayar.value) || 0;
+
+
+        if (paymentMethod.value !== 'CASH') {
+
+            return;
 
         }
 
-    });
 
-
-    // =============================================================
-    // HITUNG KEMBALIAN
-    // =============================================================
-
-    uangDibayar.addEventListener('input', function () {
-
-        const dibayar =
-            Number(this.value) || 0;
-
-
-        // Jika belum ada uang
         if (dibayar <= 0) {
 
             kembalian.textContent =
@@ -541,77 +622,175 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
 
-        // =========================================================
         // UANG KURANG
-        // =========================================================
-
-        if (dibayar < total) {
+        if (dibayar < totalAkhir) {
 
             const kurang =
-                total - dibayar;
-
+                totalAkhir - dibayar;
 
             kembalian.textContent =
                 'Rp 0';
-
 
             uangKurang.textContent =
                 'Uang masih kurang ' +
                 formatRupiah(kurang);
 
-
             uangKurang.style.display =
                 'block';
 
-
             checkoutButton.disabled =
                 true;
-
 
             return;
 
         }
 
 
-        // =========================================================
-        // UANG CUKUP / LEBIH
-        // =========================================================
-
+        // UANG CUKUP
         const hasil =
-            dibayar - total;
-
+            dibayar - totalAkhir;
 
         kembalian.textContent =
             formatRupiah(hasil);
 
-
         uangKurang.style.display =
             'none';
-
 
         checkoutButton.disabled =
             false;
 
-    });
+    }
 
+
+    // =========================================================
+    // SAAT DISKON BERUBAH
+    // =========================================================
+
+    discountPercent.addEventListener(
+        'change',
+        function () {
+
+            hitungTotal();
+
+        }
+    );
+
+
+    // =========================================================
+    // SAAT PEMBAYARAN BERUBAH
+    // =========================================================
+
+    paymentMethod.addEventListener(
+        'change',
+        function () {
+
+            if (this.value === 'CASH') {
+
+                cashPayment.style.display =
+                    'block';
+
+                uangDibayar.required =
+                    true;
+
+                checkoutButton.disabled =
+                    true;
+
+                uangDibayar.focus();
+
+                hitungKembalian();
+
+            } else {
+
+                cashPayment.style.display =
+                    'none';
+
+                uangDibayar.required =
+                    false;
+
+                uangDibayar.value =
+                    '';
+
+                kembalian.textContent =
+                    'Rp 0';
+
+                uangKurang.style.display =
+                    'none';
+
+                checkoutButton.disabled =
+                    false;
+
+            }
+
+        }
+    );
+
+
+    // =========================================================
+    // SAAT UANG DIBAYAR BERUBAH
+    // =========================================================
+
+    uangDibayar.addEventListener(
+        'input',
+        function () {
+
+            hitungKembalian();
+
+        }
+    );
+
+
+    // =========================================================
+    // JALANKAN SAAT PERTAMA DIBUKA
+    // =========================================================
+
+    hitungTotal();
 
 });
 
 
 // =============================================================
-// VALIDASI CHECKOUT
+// KONFIRMASI CHECKOUT
 // =============================================================
 
 function confirmCheckout() {
 
-    const paymentMethod =
-        document.getElementById('payment_method').value;
+    const discountPercent =
+        Number(
+            document.getElementById('discount_percent').value
+        ) || 0;
 
-    const total =
+
+    const totalAwal =
         {{ (int) $sale->total_pembayaran }};
 
 
-    // Jika Cash
+    const diskon =
+        Math.round(
+            totalAwal * discountPercent / 100
+        );
+
+
+    const totalAkhir =
+        totalAwal - diskon;
+
+
+    const paymentMethod =
+        document.getElementById('payment_method').value;
+
+
+    // METODE PEMBAYARAN BELUM DIPILIH
+    if (!paymentMethod) {
+
+        alert(
+            'Silakan pilih metode pembayaran.'
+        );
+
+        return false;
+
+    }
+
+
+    // CASH
     if (paymentMethod === 'CASH') {
 
         const uangDibayar =
@@ -620,7 +799,6 @@ function confirmCheckout() {
             ) || 0;
 
 
-        // Uang belum dimasukkan
         if (uangDibayar <= 0) {
 
             alert(
@@ -632,11 +810,12 @@ function confirmCheckout() {
         }
 
 
-        // Uang kurang
-        if (uangDibayar < total) {
+        if (uangDibayar < totalAkhir) {
 
             alert(
-                'Uang yang dibayar masih kurang.'
+                'Uang yang dibayar masih kurang.\n\n' +
+                'Total bayar: ' +
+                formatRupiah(totalAkhir)
             );
 
             return false;
@@ -646,7 +825,37 @@ function confirmCheckout() {
     }
 
 
-    return true;
+    // KONFIRMASI
+    return confirm(
+
+        'Konfirmasi Transaksi\n\n' +
+
+        'Total belanja: ' +
+        formatRupiah(totalAwal) +
+
+        '\nDiskon ' +
+        discountPercent +
+        '%: ' +
+        formatRupiah(diskon) +
+
+        '\nTotal bayar: ' +
+        formatRupiah(totalAkhir) +
+
+        '\n\nLanjutkan checkout?'
+
+    );
+
+}
+
+
+// =============================================================
+// FORMAT RUPIAH
+// =============================================================
+
+function formatRupiah(angka) {
+
+    return 'Rp ' +
+        Number(angka).toLocaleString('id-ID');
 
 }
 
